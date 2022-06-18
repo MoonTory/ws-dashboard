@@ -1,33 +1,25 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
+import { Menu as MenuIcon } from '@mui/icons-material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { Menu as MenuIcon, Notifications as NotificationsIcon } from '@mui/icons-material'
-import { Box, Badge, Toolbar, Container, Typography, IconButton, CssBaseline } from '@mui/material'
+import { Box, Toolbar, Container, Typography, IconButton, CssBaseline } from '@mui/material'
 
 import { Drawer } from './Drawer'
 
-import { routes } from '~/routes'
-import { useCurrentPath } from '~/hooks'
+import { useCurrentRoute } from '~/hooks'
 import { AppBar, Preloader } from '~/components'
 
-const mdTheme = createTheme()
+const theme = createTheme()
 
 export const Dashboard: React.FC = () => {
-	const path = useCurrentPath()
+	const route = useCurrentRoute()
 
 	const [open, setOpen] = React.useState(true)
-	const toggle = () => setOpen(!open)
 
-	const currentRoute = () => {
-		const route = routes.find((route) => route.path === path)
-
-		if (!route) return routes[0]
-
-		return route
-	}
+	const toggleDrawer = () => setOpen(!open)
 
 	return (
-		<ThemeProvider theme={mdTheme}>
+		<ThemeProvider theme={theme}>
 			<Box sx={{ display: 'flex' }}>
 				<CssBaseline />
 				<AppBar position="absolute" open={open}>
@@ -35,33 +27,28 @@ export const Dashboard: React.FC = () => {
 						<IconButton
 							edge="start"
 							color="inherit"
-							onClick={toggle}
+							onClick={toggleDrawer}
 							aria-label="open AppDrawer"
 							sx={{ marginRight: '36px', ...(open && { display: 'none' }) }}
 						>
 							<MenuIcon />
 						</IconButton>
 						<Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-							{currentRoute().name}
+							{route.name}
 						</Typography>
-						<IconButton color="inherit">
-							<Badge badgeContent={4} color="secondary">
-								<NotificationsIcon />
-							</Badge>
-						</IconButton>
 					</Toolbar>
 				</AppBar>
 
-				<Drawer open={open} toggle={toggle} />
+				<Drawer open={open} toggle={toggleDrawer} />
 
 				<Box
 					component="main"
 					sx={{
-						backgroundColor: (theme) =>
-							theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
 						flexGrow: 1,
 						height: '100vh',
-						overflow: 'auto'
+						overflow: 'auto',
+						backgroundColor: (theme) =>
+							theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900]
 					}}
 				>
 					<Toolbar />

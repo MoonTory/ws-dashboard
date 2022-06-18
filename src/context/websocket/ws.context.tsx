@@ -38,12 +38,6 @@ export const WebSocketProvider: React.FC<React.PropsWithChildren> = ({ children 
 		dispatch({ type: WebSocketActions.REMOVE_LISTENER, payload: newListeners })
 	}, [])
 
-	React.useEffect(() => {
-		connect('wss://06cwgry0v3.execute-api.us-east-1.amazonaws.com/v1?token=fe6e4109b07d4eb2bd85f2c21707f97c')
-
-		return () => close()
-	}, [])
-
 	return (
 		<WebSocketContext.Provider value={{ state, connect, close, sendMessage, addListener, removeListener }}>
 			{children}
